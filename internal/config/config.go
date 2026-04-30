@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -25,7 +26,7 @@ func Load() (*Config, error) {
 
 	cfg := &Config{
 		APIKey:         getEnv("API_KEY", ""),
-		Port:           getEnv("PORT", ":8080"),
+		Port:           normalizePort(getEnv("PORT", ":8080")),
 		AWSRegion:      getEnv("AWS_REGION", "us-east-1"),
 		IdentityPoolID: getEnv("IDENTITY_POOL_ID", ""),
 		AWSAccountID:   getEnv("AWS_ACCOUNT_ID", ""),
@@ -44,6 +45,13 @@ func Load() (*Config, error) {
 	}
 
 	return cfg, nil
+}
+
+func normalizePort(port string) string {
+	if !strings.HasPrefix(port, ":") {
+		return ":" + port
+	}
+	return port
 }
 
 func getEnv(key, fallback string) string {

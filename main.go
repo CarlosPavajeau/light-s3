@@ -24,13 +24,13 @@ func main() {
 
 	h := handlers.New(presigner, cfg.BucketName, cfg.PresignExpiry)
 
-	r := gin.Default()
-	r.Use(middleware.APIKey(cfg.APIKey))
+	g := gin.Default()
+	g.Use(middleware.APIKey(cfg.APIKey))
 
-	r.POST("/presign/upload", h.UploadURL)
-	r.POST("/presign/download", h.DownloadURL)
+	g.POST("/presign/upload", h.UploadURL)
+	g.POST("/presign/download", h.DownloadURL)
 
-	if err := r.Run(cfg.Port); err != nil {
+	if err := g.Run(cfg.Port); err != nil {
 		log.Fatalf("server: %v", err)
 	}
 }
